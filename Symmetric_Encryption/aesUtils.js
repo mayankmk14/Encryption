@@ -4,14 +4,12 @@ var generateAES = async function () {
     try {
         var password = "Village hidden in the Leaf"
         salt = await crypto.randomBytes(32)
-        console.log("Salt", salt)
         //Using PBKDF2-HMAC-SHA512 with 100,000 iterations, create a key using the password and the salt.
         derivedKey = await crypto.pbkdf2Sync(password, salt, 10, 32, "sha512")
         var aes256Key = new Buffer(derivedKey).toString('hex');
         return aes256Key;
     } catch (err) {
         console.log("ERROR", err)
-        return err
     }
 }
 
@@ -26,8 +24,8 @@ try {
     encrypted = Buffer.concat([encrypted, cipher.final()]);
     var tag = cipher.getAuthTag();
     var encryptedData = Buffer.concat([iv, tag, encrypted]).toString('hex')
-    console.log("0Data ",plainString)
-    console.log("Encrypted Data ",encryptedData)
+    // console.log("0Data ",plainString)
+    // console.log("Encrypted Data ",encryptedData)
     return encryptedData
 } catch (err) {
     console.log("Error",err)
@@ -52,20 +50,10 @@ var decrypt = async function (aesKey, encryptedString) {
         var decryptedData = decrypted.toString()
         return (decryptedData);
     } catch (error) {
-        return (error);
+        console.log(error);
     }
 }
 
-
-var some = async () => {
-    console.log("sdsd")
-    let aes = await generateAES()
-    encpt = await encrypt(aes,"My name is Mayank")
-    console.log("Encrypt",encpt)
-    console.log(await decrypt(aes,encpt))
-};
-
-some();
 
 
 module.exports = {
